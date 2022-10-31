@@ -8,6 +8,7 @@
 Ranjit#6511
 
 # Required
+Download prop_cs_shopping_bag.ydr From Above and paste it in any Map Stream Folder
 **qb-core/shared/items.lua**
 ```
 	["emsbag"]   	= {["name"] = "emsbag", 		["label"] = "emsbag", 	["weight"] = 150, 		["type"] = "item", 		["image"] = "emsbag.png", 			["unique"] = false,   	["useable"] = true,    ["shouldClose"] = false,    ["combinable"] = nil,   ["description"] = ""},
