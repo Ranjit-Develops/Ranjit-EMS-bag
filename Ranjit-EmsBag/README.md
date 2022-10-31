@@ -1,7 +1,8 @@
 # Ranjit-EmsBag script for QB-Core
 
-| If you are interested in joining my community: https://discord.gg/5aHC4bGtK3
-| Preview:- https://youtu.be/76tEgC4IEGk
+| If you are interested in joining my community: https://discord.gg/5aHC4bGtK3|
+
+| Preview:- https://www.youtube.com/watch?v=YZMXKqKPeK4|
 # Information
 * A Script That Would Allow Ems To carry a Their Job Bag   
 
