@@ -7,7 +7,7 @@ RegisterNetEvent('Ranjit-EmsBag:Client:SpawnAmbulanceBag', function(objectId, ty
     local heading = GetEntityHeading(GetPlayerPed(GetPlayerFromServerId(player)))
     local forward = GetEntityForwardVector(PlayerPedId())
     local x, y, z = table.unpack(coords + forward * 0.5)
-    local spawnedObj = CreateObject(Config.Bag.AmbulanceBag[type].model, x, y, z, true, false, false)
+    local spawnedObj = CreateObject(Config.Bag.AmbulanceBag[type].model, x, y, coords.z-1, true, false, false)
     PlaceObjectOnGroundProperly(spawnedObj)
     SetEntityHeading(spawnedObj, heading)
     FreezeEntityPosition(spawnedObj, Config.Bag.AmbulanceBag[type].freeze)
@@ -16,6 +16,7 @@ RegisterNetEvent('Ranjit-EmsBag:Client:SpawnAmbulanceBag', function(objectId, ty
         object = spawnedObj,
         coords = vector3(x, y, z - 0.3),
     }
+    TriggerServerEvent("Ranjit-EmsBag:Server:RemoveItem","emsbag",1)
 end)
 
 RegisterNetEvent('Ranjit-EmsBag:Client:spawnLight', function()
@@ -38,6 +39,7 @@ AddEventHandler("Ranjit-EmsBag:Client:GuardarAmbulanceBag", function()
     Notify("Ems Bag Taken Back with success.")
     SetEntityAsMissionEntity(AmbulanceBag, 1, 1)
     DeleteObject(AmbulanceBag)
+    TriggerServerEvent("Ranjit-EmsBag:Server:AddItem","emsbag",1)
 end)
 
 local citizenid = nil
