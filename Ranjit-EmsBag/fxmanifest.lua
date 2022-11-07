@@ -5,7 +5,7 @@ author 'Ranjit#6511'
 description 'A Script That Would Allow Ems To carry a Their Job Bag'
 discord 'https://discord.gg/5aHC4bGtK3'
 github 'https://github.com/Ranjit-Develops'
-version '1.0.0'
+version '1.0.2'
 
 shared_scripts {
     "configs/**.lua"
@@ -30,7 +30,8 @@ files {
 
 dependencies {
     'qb-core',
-    'qb-inventory'
+    'qb-inventory',
+    'qb-target'
 }
 
 lua54 'yes'
