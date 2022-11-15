@@ -30,7 +30,6 @@ files {
 
 dependencies {
     'qb-core',
-    'qb-inventory',
     'qb-target'
 }
 
