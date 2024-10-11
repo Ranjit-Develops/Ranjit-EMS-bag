@@ -1,7 +1,7 @@
 # Ranjit-EmsBag script for QB-Core
 
 | If you are interested in joining my community: https://discord.gg/TdDRdWpeJz
-| For Question join the Discord or add me Ranjit#6511
+| For Question join the Discord or add me ranjit_07
 
 | Preview:- https://youtube.com/watch?v=ZWsk1eNjMPE&si=EnSIkaIECMiOmarE|
 # Information
