@@ -36,4 +36,10 @@ RegisterNetEvent('Ranjit-EmsBag:Server:AddItem', function(item, amount)
     Player.Functions.AddItem(item, amount)
 end)
 
+RegisterNetEvent('Ranjit-EmsBag:Server:DeductMoney', function(amount)
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+    Player.Functions.RemoveMoney('cash', amount)
+end)
+
 
