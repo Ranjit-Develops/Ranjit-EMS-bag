@@ -5,7 +5,8 @@
 
 | Preview:- https://youtube.com/watch?v=ZWsk1eNjMPE&si=EnSIkaIECMiOmarE|
 # Information
-* A Script That Would Allow Ems To carry a Their Job Bag   
+* A Script That Would Allow Ems To carry a Their Job Bag
+* Now you can set money in config to be deducted in cash if bag opened ( can be false or any number)
 
 # Required
 Add this to **qb-core/shared/items.lua**
