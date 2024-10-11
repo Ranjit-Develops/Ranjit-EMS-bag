@@ -51,6 +51,17 @@ RegisterNetEvent('Ranjit-EmsBag:Client:MenuAmbulanceBag', function()
     if IsEntityDead(playerPed) then return Notify("You cannot Open Bag while dead", "error") end
     if IsPedSwimming(playerPed) then return Notify("You cannot Open Bag in the water.", "error") end
     if IsPedSittingInAnyVehicle(playerPed) then return Notify("You cannot Open Bag inside a vehicle", "error") end
+
+    -- Check if money deduction is enabled
+    if Config.Bag.Money and Config.Bag.Money > 0 then
+        local playerMoney = QBCore.Functions.GetPlayerData().money['cash']
+        if playerMoney >= Config.Bag.Money then
+            TriggerServerEvent('Ranjit-EmsBag:Server:DeductMoney', Config.Bag.Money)
+        else
+            return Notify("You do not have enough money to open the bag.", "error")
+        end
+    end
+
     exports['qb-menu']:openMenu({
         { header = "[🚑] Ambulance Box", txt = "", isMenuHeader = true },
         { header = "[👜] Open AmbulanceBag",  params = { event = "Ranjit-EmsBag:Client:StorageAmbulanceBag" } },
