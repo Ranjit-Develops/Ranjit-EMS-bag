@@ -1,56 +1,35 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
+-- Function to handle the giving of items with progress bar
+local function GiveItem(itemKey)
+    local item = Config.Items[itemKey]
+    if not item then return end
 
--- Simple Event's , you can create yours and put on qb-menu :)
-
-RegisterNetEvent('Ranjit-EmsBag:Client:GiveRadio')
-AddEventHandler("Ranjit-EmsBag:Client:GiveRadio", function()
     local playerPed = PlayerPedId()
-    TaskStartScenarioInPlace(playerPed, "CODE_HUMAN_MEDIC_TEND_TO_DEAD")
-    progressBar("Taking a Radio ...")
-    TriggerServerEvent("Ranjit-EmsBag:Server:AddItem", "radio", 1)
-    TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["radio"], "add", 1)
+    -- Use the shared scenario from Config
+    TaskStartScenarioInPlace(playerPed, Config.Scenario)
+    progressBar("Taking " .. item.label .. " ...")
+    TriggerServerEvent("Ranjit-EmsBag:Server:AddItem", item.name, 1)
+    TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items[item.name], "add", 1)
+end
+
+-- Event Handlers
+RegisterNetEvent('Ranjit-EmsBag:Client:GiveItem', function(itemKey)
+    GiveItem(itemKey)
 end)
 
-RegisterNetEvent('Ranjit-EmsBag:Client:Givebandage')
-AddEventHandler("Ranjit-EmsBag:Client:Givebandage", function()
-    local playerPed = PlayerPedId()
-    TaskStartScenarioInPlace(playerPed, "CODE_HUMAN_MEDIC_TEND_TO_DEAD")
-    progressBar("Taking Bandage ...")
-    TriggerServerEvent("Ranjit-EmsBag:Server:AddItem", "bandage", 1)
-    TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["bandage"], "add", 1)
-end)
-RegisterNetEvent('Ranjit-EmsBag:Client:Givepainkillers')
-AddEventHandler("Ranjit-EmsBag:Client:Givepainkillers", function()
-    local playerPed = PlayerPedId()
-    TaskStartScenarioInPlace(playerPed, "CODE_HUMAN_MEDIC_TEND_TO_DEAD")
-    progressBar("Taking Painkillers ...")
-    TriggerServerEvent("Ranjit-EmsBag:Server:AddItem", "painkillers", 1)
-    TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["painkillers"], "add", 1)
-end)
-RegisterNetEvent('Ranjit-EmsBag:Client:Givefirstaid')
-AddEventHandler("Ranjit-EmsBag:Client:Givefirstaid", function()
-    local playerPed = PlayerPedId()
-    TaskStartScenarioInPlace(playerPed, "CODE_HUMAN_MEDIC_TEND_TO_DEAD")
-    progressBar("Taking Firstaid ...")
-    TriggerServerEvent("Ranjit-EmsBag:Server:AddItem", "firstaid", 1)
-    TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["firstaid"], "add", 1)
-end)
-RegisterNetEvent('Ranjit-EmsBag:Client:Giveweapon_flashlight')
-AddEventHandler("Ranjit-EmsBag:Client:Giveweapon_flashlight", function()
-    local playerPed = PlayerPedId()
-    TaskStartScenarioInPlace(playerPed, "CODE_HUMAN_MEDIC_TEND_TO_DEAD")
-    progressBar("Taking Flashlight ...")
-    TriggerServerEvent("Ranjit-EmsBag:Server:AddItem", "weapon_flashlight", 1)
-    TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["weapon_flashlight"], "add", 1)
-end)
-
-
+-- Menu to open Ambulance Bag
 RegisterNetEvent('Ranjit-EmsBag:Client:MenuAmbulanceBag', function()
     local playerPed = PlayerPedId()
-    if IsEntityDead(playerPed) then return Notify("You cannot Open Bag while dead", "error") end
-    if IsPedSwimming(playerPed) then return Notify("You cannot Open Bag in the water.", "error") end
-    if IsPedSittingInAnyVehicle(playerPed) then return Notify("You cannot Open Bag inside a vehicle", "error") end
+    if IsEntityDead(playerPed) then
+        return Notify("You cannot open the bag while dead", "error")
+    end
+    if IsPedSwimming(playerPed) then
+        return Notify("You cannot open the bag in the water", "error")
+    end
+    if IsPedSittingInAnyVehicle(playerPed) then
+        return Notify("You cannot open the bag inside a vehicle", "error")
+    end
 
     -- Check if money deduction is enabled
     if Config.Bag.Money and Config.Bag.Money > 0 then
@@ -62,16 +41,17 @@ RegisterNetEvent('Ranjit-EmsBag:Client:MenuAmbulanceBag', function()
         end
     end
 
-    exports['qb-menu']:openMenu({
-        { header = "[🚑] Ambulance Box", txt = "", isMenuHeader = true },
-        { header = "[👜] Open AmbulanceBag",  params = { event = "Ranjit-EmsBag:Client:StorageAmbulanceBag" } },
-        { header = "[🩹]Take Bandage ",  params = { event = "Ranjit-EmsBag:Client:Givebandage" } },
-        { header = "[💊] Take Painkillers ",  params = { event = "Ranjit-EmsBag:Client:Givepainkillers" } },
-        { header = "[💉] Take Firstaid ",  params = { event = "Ranjit-EmsBag:Client:Givefirstaid" } },
-        { header = "[🔦] Take FlashLight ",  params = { event = "Ranjit-EmsBag:Client:Giveweapon_flashlight" } },
-        { header = "[📻] Take Radio",  params = { event = "Ranjit-EmsBag:Client:GiveRadio" } },
-        -- You can add more menus with your's personal events...
-        { header = "", txt = "❌ Close", params = { event = "qb-menu:closeMenu" } },
-    })
-end)
+    -- Open menu
+    local menuOptions = {}
+    for key, item in pairs(Config.Items) do
+        table.insert(menuOptions, {
+            header = "[" .. item.label .. "] Take " .. item.label,
+            params = { event = "Ranjit-EmsBag:Client:GiveItem", args = key }
+        })
+    end
 
+    -- Add close option
+    table.insert(menuOptions, { header = "", txt = "❌ Close", params = { event = "qb-menu:closeMenu" } })
+
+    exports['qb-menu']:openMenu(menuOptions)
+end)
